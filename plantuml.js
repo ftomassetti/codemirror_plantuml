@@ -91,7 +91,11 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/skinparam/)){
 					state.name = "skinparam";
 					return "keyword";
-				}																
+				}
+				if (stream.match(/class/)){
+					state.name = "class kw";
+					return "keyword";
+				}																	
 				while (stream.next() && !stream.eol()){				
 				}
 				return null;
@@ -185,6 +189,61 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					return "string";
 				}
 				throw "skinparam block, blocked on "+stream.peek();
+			} else if (state.name === "class kw"){
+				if (stream.sol()){
+					state.name = "base"
+					return null;
+				}		
+				if (stream.match(/[\t ]+/)) {
+					return null;
+				}
+				if (stream.match(/[A-Za-z_]+/)) {
+					return "def";
+				}								
+				if (stream.match(/\{/)){
+					state.name = "class def";
+					return "operator";
+				}
+				throw "class kw, blocked on "+stream.peek();
+			} else if (state.name === "class def"){
+				if (stream.match(/[\t ]+/)) {
+					return null;
+				}				
+				if (stream.match(/\}/)) {
+					state.name = "base";
+					return "operator";
+				}
+				if (stream.match(/\+/)) {
+					return "operator";
+				}	
+				if (stream.match(/-/)) {
+					return "operator";
+				}
+				if (stream.match(/#/)) {
+					return "operator";
+				}
+				if (stream.match(/~/)) {
+					return "operator";
+				}
+				if (stream.match(/\(/)) {
+					return "operator";
+				}
+				if (stream.match(/\)/)) {
+					return "operator";
+				}
+				if (stream.match(/void/)) {
+					return "keyword";
+				}
+				if (stream.match(/Int/)) {
+					return "keyword";
+				}
+				if (stream.match(/Float/)) {
+					return "keyword";
+				}
+				if (stream.match(/[A-Za-z_]+/)) {
+					return "variable";
+				}																												
+				throw "class kw, blocked on "+stream.peek();				
 			} else {
 				throw "Unknown state "+state.name;
 			}
