@@ -9,23 +9,32 @@
 <textarea id="demotext">
 @startuml
 
-Employee -up-|> User
-Client -up-|> User
-Supervisor -up-|> User
-Employee --> (Login)
-Supervisor --> (Login)
-Client ..> (Login) : NO!!!!
-Supervisor --> (Create / Delete User): I am god
+title Activity Diagram 
 
-@enduml	
+start
+
+:Eat Hot Wings;
+
+note left
+    This is a Note...
+    * Activity diagrams can begin with a Start
+    * An activity is colon, some words, and a semicolon
+    * Activity diagrams can end with a stop
+end note
+
+:Drink Homebrew;
+
+stop
+
+@enduml
 </textarea>
 <script>
   var myTextarea = document.getElementById("demotext");
   var editor = CodeMirror.fromTextArea(myTextarea, {
     lineNumbers: true
   });
-  document.getElementById("demotext").style.width = "600px";
-  document.getElementById("demotext").style.height = "400px";
+  document.getElementById("demotext").style.width = "800px";
+  document.getElementById("demotext").style.height = "1500px";
 
 </script>
 
