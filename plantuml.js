@@ -64,6 +64,27 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/endif/)){
 					return "keyword";
 				}			
+				if (stream.match(/repeat/)){
+					return "keyword";
+				}
+				if (stream.match(/while/)){
+					return "keyword";
+				}
+				if (stream.match(/endwhile/)){
+					return "keyword";
+				}
+				if (stream.match(/is/)){
+					return "keyword";
+				}
+				if (stream.match(/fork/)){
+					return "keyword";
+				}				
+				if (stream.match(/again/)){
+					return "keyword";
+				}				
+				if (stream.match(/end/)){
+					return "keyword";
+				}																			
 				if (stream.match(/\([a-zA-Z _!?]*\)/)){
 					return "string";
 				}																
