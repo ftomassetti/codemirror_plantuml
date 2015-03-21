@@ -13,7 +13,7 @@
 })(function(CodeMirror) {
 "use strict";
 
-CodeMirror.defineMode("PlantUML", function(config, parserConfig) {
+CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 	console.log("Defining method");
 	return {
 
@@ -23,10 +23,18 @@ CodeMirror.defineMode("PlantUML", function(config, parserConfig) {
         	};
       	},
 		token: function(stream, state) {
-			while (stream.next()){
-
+			if (stream.eatSpace()) {
+				return null;
 			}
-			return "atoken";
+			if (stream.match(/@startuml/)) {
+				return "keyword";
+			}
+			if (stream.match(/@enduml/)) {
+				return "keyword";
+			}			
+			while (stream.next() && !stream.eol()){				
+			}
+			return null;
 		}
 	};
 });
