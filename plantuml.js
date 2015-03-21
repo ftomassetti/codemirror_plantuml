@@ -45,13 +45,28 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					return "keyword";
 				}						
 				// a state
-				if (stream.match(/:[a-zA-Z ]*;/)) {
-					return "variable";
+				if (stream.match(/:[a-zA-Z _!?]*;/)) {
+					return "def";
 				}	
 				if (stream.match(/note/)) {
 					state.name = "note init";
 					return "keyword";
-				}									
+				}	
+				if (stream.match(/if/)){
+					return "keyword";
+				}					
+				if (stream.match(/then/)){
+					return "keyword";
+				}					
+				if (stream.match(/else/)){
+					return "keyword";
+				}
+				if (stream.match(/endif/)){
+					return "keyword";
+				}			
+				if (stream.match(/\([a-zA-Z _!?]*\)/)){
+					return "string";
+				}																
 				while (stream.next() && !stream.eol()){				
 				}
 				return null;
@@ -71,15 +86,25 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/left/)) {
 					return "keyword";
 				}
-				throw "Note init, blocked on "+stream.peek();	
+				if (stream.match(/right/)) {
+					return "keyword";
+				}
+				if (stream.match(/:/)){
+					state.name = "note body inline";
+					return "operator";
+				}				
+				throw "Note init, blocked on "+stream.peek();
+			} else if (state.name === "note body inline"){
+				state.name = "base";
+				stream.skipToEnd();
+				return "string";
 			} else if (state.name === "note body"){
 				if (stream.match(/end note/)) {
 					state.name = "base";
 					return "keyword";
-				} else {
-					stream.skipToEnd();
-					return "string";
 				}
+				stream.skipToEnd();
+				return "string";
 			} else {
 				throw "Unknown state "+state.name;
 			}

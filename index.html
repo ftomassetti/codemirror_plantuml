@@ -9,20 +9,24 @@
 <textarea id="demotext">
 @startuml
 
-title Activity Diagram 
+title Conditional - Activity Diagram 
+
 
 start
 
-:Eat Hot Wings;
+:Eat Hot Wings; 
+note right: This is a note to the right
 
-note left
-    This is a Note...
-    * Activity diagrams can begin with a Start
-    * An activity is colon, some words, and a semicolon
-    * Activity diagrams can end with a stop
-end note
+:Drink Homebrew; 
+note left: This is a note to the left
 
-:Drink Homebrew;
+if (Turn On The Game?) then (yes)
+  :__Having Fun__!!!;
+else (no)
+  :Not Having Fun;
+endif
+
+:Go To Bed;
 
 stop
 
