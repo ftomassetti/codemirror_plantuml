@@ -87,6 +87,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				}																			
 				if (stream.match(/\([a-zA-Z _!?]*\)/)){
 					return "string";
+				}	
+				if (stream.match(/skinparam/)){
+					state.name = "skinparam";
+					return "keyword";
 				}																
 				while (stream.next() && !stream.eol()){				
 				}
@@ -126,6 +130,61 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				}
 				stream.skipToEnd();
 				return "string";
+			} else if (state.name === "skinparam"){
+				if (stream.sol()){
+					state.name = "base"
+					return null;
+				}					
+				if (stream.match(/[\t ]+/)) {
+					return null;
+				}
+				if (stream.match(/backgroundColor/)){
+					return "keyword";
+				}
+				if (stream.match(/activity/)){
+					return "keyword";
+				}				
+				if (stream.match(/#[0-9a-fA-F]{6}/)){
+					return "string";
+				}
+				if (stream.match(/\{/)){
+					state.name = "skinparam block";
+					return "operator";
+				}
+				throw "skinparam, blocked on "+stream.peek();
+			} else if (state.name === "skinparam block"){
+				if (stream.match(/\}/)){
+					state.name = "base"
+					return "operator";
+				}					
+				if (stream.match(/[\t ]+/)) {
+					return null;
+				}
+				if (stream.match(/StartColor/)){
+					return "keyword";
+				}
+				if (stream.match(/EndColor/)){
+					return "keyword";
+				}
+				if (stream.match(/BackgroundColor/)){
+					return "keyword";
+				}
+				if (stream.match(/BorderColor/)){
+					return "keyword";
+				}
+				if (stream.match(/Blue/)){
+					return "string";
+				}
+				if (stream.match(/Red/)){
+					return "string";
+				}
+				if (stream.match(/Green/)){
+					return "string";
+				}
+				if (stream.match(/Yellow/)){
+					return "string";
+				}
+				throw "skinparam block, blocked on "+stream.peek();
 			} else {
 				throw "Unknown state "+state.name;
 			}

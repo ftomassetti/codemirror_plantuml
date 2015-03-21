@@ -8,27 +8,22 @@
 <textarea id="demotext">
 @startuml
 
-title Parallel - Activity Diagram 
+title Color - Activity Diagram 
 
+
+skinparam backgroundColor #AAAAAA
+skinparam activity {
+  StartColor Blue
+  EndColor Red
+  BackgroundColor Green
+  BorderColor Yellow
+}
 
 start
 
 :Eat Hot Wings;
 
 :Drink Homebrew;
-
-if (Turn On The Game?) then (yes)
-  fork
-    :__Having Fun__!!!;
-  fork again
-    :Scream At TV!!;
-  end fork
-else (no)
-  :Not Having Fun;
-  :Eat Poptart;
-endif
-
-:Go To Bed;
 
 stop
 
