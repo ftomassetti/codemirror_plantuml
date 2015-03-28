@@ -115,7 +115,6 @@
   }
 
   function highlight(string, mode) {
-    console.log("HIGHLIGHT MODE"+mode.startState);
     var state = mode.startState();
 
     var lines = string.replace(/\r\n/g,'\n').split('\n');

@@ -23,7 +23,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
         	};
       	},
 		token: function(stream, state) {
-			console.log("state "+state.name+ " '"+stream.peek()+"'");
+			//console.log("state "+state.name+ " '"+stream.peek()+"'");
 			if (state.name === "base"){
 				if (stream.match(/[\t ]+/)) {
 					return null;
@@ -51,7 +51,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/note/)) {
 					state.name = "note init";
 					return "keyword";
-				}	
+				}
+				if (stream.match(/abstract/)){
+					return "keyword";
+				}						
 				if (stream.match(/if/)){
 					return "keyword";
 				}					
@@ -166,6 +169,12 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/backgroundColor/)){
 					return "keyword";
 				}
+				if (stream.match(/componentStyle/)){
+					return "keyword";
+				}
+				if (stream.match(/uml2/)){
+					return "keyword";
+				}							
 				if (stream.match(/activity/)){
 					return "keyword";
 				}				

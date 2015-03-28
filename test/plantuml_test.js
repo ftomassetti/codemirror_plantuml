@@ -135,4 +135,71 @@
     "[variable Dwelling] [string \"1\"] [operator *-up-] [string \"many\"] [variable Door][operator :] [keyword Composition]"
   );
 
+  MT("style_for_class",
+    "[keyword skinparam] [keyword componentStyle] [keyword uml2]"
+  );
+
+  MT("abstract_class", 
+    "[keyword abstract] [keyword class] [def AbstractList] [operator {]",
+    "",
+    "[operator }]"
+  );
+
+  /*MT("class_with_stereotype",
+    "class Test << general >> {",
+    "}"
+  );
+
+  MT("style_on_stereotype",
+    "class System << (S,#FF7700) Singleton >>"
+  );
+
+  MT("multiple_stereotypes",
+    "class Date << (D,orchid) >>"
+  );
+
+  MT("content_of_class",
+    "class Foo1<Generics tag> {",
+    "You can use",
+    "several lines",
+    "[operator ..]",
+    "as you want",
+    "and group",
+    "[operator ==]",
+    "things together.",
+    "[operator __]",
+    "You can have as many groups",
+    "as you want",
+    "[operator --]",
+    "End of class",
+    "}"
+  );
+/*
+class User {
+  .. Simple Getter ..
+  + getName() : String
+  + getAddress() : Address
+  .. Some setter ..
+  + setName() : String
+  __ private data __
+  -int age
+  -- crypted --
+  -String password
+}
+
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+
+interface List {
+
+}
+
+annotation SuppressWarnings
+
+class Object << general >>
+Object <|--- ArrayList*/
+
 })();
