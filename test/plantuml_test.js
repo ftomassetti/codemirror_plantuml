@@ -107,20 +107,20 @@
   );
 
   MT("colors",
-    "[keyword skinparam] [keyword backgroundColor] [string #AAAAAA]",
-    "[keyword skinparam] [keyword activity] [operator {]",
-    "  [keyword StartColor] [string Blue]",
-    "  [keyword EndColor] [string Red]",
-    "  [keyword BackgroundColor] [string Green]",
-    "  [keyword BorderColor] [string Yellow]",
-    "[operator }]"
+    "[keyword skinparam] [attribute backgroundColor] [atom #AAAAAA]",
+    "[keyword skinparam] [keyword activity] [bracket {]",
+    "  [attribute StartColor] [atom Blue]",
+    "  [attribute EndColor] [atom Red]",
+    "  [attribute BackgroundColor] [atom Green]",
+    "  [attribute BorderColor] [atom Yellow]",
+    "[bracket }]"
   );
 
   MT("classes_firstExample",
-    "[keyword class] [def Dwelling] [operator {]",
+    "[keyword class] [def Dwelling] [bracket {]",
     "  [operator +][keyword Int] [def Windows]",
     "  [operator +][keyword void] [def Lock][operator ()]",
-    "[operator }]",
+    "[bracket }]",
     "",
     "[keyword class] [def Apartment]",
     "[keyword class] [def House]",
@@ -140,14 +140,14 @@
   );
 
   MT("abstract_class", 
-    "[keyword abstract] [keyword class] [def AbstractList] [operator {]",
+    "[keyword abstract] [keyword class] [def AbstractList] [bracket {]",
     "",
-    "[operator }]"
+    "[bracket }]"
   );
 
   MT("class_with_stereotype",
-    "[keyword class] [def Test] [operator <<] [variable general] [operator >>] [operator {]",
-    "[operator }]"
+    "[keyword class] [def Test] [operator <<] [variable general] [operator >>] [bracket {]",
+    "[bracket }]"
   );
 
   MT("style_on_stereotype",
@@ -159,7 +159,7 @@
   );
 
   MT("content_of_class",
-    "[keyword class] [def Foo1]<Generics tag> [operator {]",
+    "[keyword class] [def Foo1]<Generics tag> [bracket {]",
     "You can use",
     "several lines",
     "[operator ..]",
@@ -172,7 +172,7 @@
     "as you want",
     "[operator --]",
     "End of class",
-    "[operator {]"
+    "[bracket {]"
   );
 /*
 class User {

@@ -193,7 +193,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					return null;
 				}
 				if (stream.match(/backgroundColor/)){
-					return "keyword";
+					return "attribute";
 				}
 				if (stream.match(/componentStyle/)){
 					return "keyword";
@@ -205,44 +205,44 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					return "keyword";
 				}				
 				if (stream.match(/#[0-9a-fA-F]{6}/)){
-					return "string";
+					return "atom";
 				}
 				if (stream.match(/\{/)){
 					state.name = "skinparam block";
-					return "operator";
+					return "bracket";
 				}
 				throw "skinparam, blocked on "+stream.peek();
 			} else if (state.name === "skinparam block"){
 				if (stream.match(/\}/)){
 					state.name = "base"
-					return "operator";
+					return "bracket";
 				}					
 				if (stream.match(/[\t ]+/)) {
 					return null;
 				}
 				if (stream.match(/StartColor/)){
-					return "keyword";
+					return "attribute";
 				}
 				if (stream.match(/EndColor/)){
-					return "keyword";
+					return "attribute";
 				}
 				if (stream.match(/BackgroundColor/)){
-					return "keyword";
+					return "attribute";
 				}
 				if (stream.match(/BorderColor/)){
-					return "keyword";
+					return "attribute";
 				}
 				if (stream.match(/Blue/)){
-					return "string";
+					return "atom";
 				}
 				if (stream.match(/Red/)){
-					return "string";
+					return "atom";
 				}
 				if (stream.match(/Green/)){
-					return "string";
+					return "atom";
 				}
 				if (stream.match(/Yellow/)){
-					return "string";
+					return "atom";
 				}
 				throw "skinparam block, blocked on "+stream.peek();
 			} else if (state.name === "class kw"){
@@ -258,7 +258,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				}								
 				if (stream.match(/\{/)){
 					state.name = "class def";
-					return "operator";
+					return "bracket";
 				}
 				if (stream.match(/<</)) {
 					state.old_state = state.name;
@@ -293,7 +293,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				}				
 				if (stream.match(/\}/)) {
 					state.name = "base";
-					return "operator";
+					return "bracket";
 				}
 				if (stream.match(/\+/)) {
 					return "operator";
