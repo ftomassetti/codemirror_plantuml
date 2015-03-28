@@ -8,17 +8,25 @@
 <textarea id="demotext">
 @startuml
 
-title Classes - Class Diagram
+title Relationships - Class Diagram
 
 
 class Dwelling {
   +Int Windows
-  +void Lock()
+  +void LockTheDoor()
 }
 
 class Apartment
 class House
 class Commune
+class Window
+class Door
+
+Dwelling <|-down- Apartment: Inheritance
+Dwelling <|-down- Commune: Inheritance
+Dwelling <|-down- House: Inheritance
+Dwelling "1" *-up- "many" Window: Composition
+Dwelling "1" *-up- "many" Door: Composition
 
 @enduml
 </textarea>

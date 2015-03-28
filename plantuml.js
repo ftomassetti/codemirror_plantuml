@@ -18,8 +18,8 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 
 		startState: function() {
         	return {       
-        	    name: "base",   		        		
-          		previousToken: { style: null, state: "base" }
+        	    name: "base"   		        		
+          		//previousToken: { style: null, state: "base" }
         	};
       	},
 		token: function(stream, state) {
