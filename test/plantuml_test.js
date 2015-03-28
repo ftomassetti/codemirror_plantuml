@@ -116,4 +116,23 @@
     "[operator }]"
   );
 
+  MT("classes_firstExample",
+    "[keyword class] [def Dwelling] [operator {]",
+    "  [operator +][keyword Int] [def Windows]",
+    "  [operator +][keyword void] [def Lock][operator ()]",
+    "[operator }]",
+    "",
+    "[keyword class] [def Apartment]",
+    "[keyword class] [def House]",
+    "[keyword class] [def Commune]"
+  );
+
+  MT("classdiagram_relationships",
+    "[variable Dwelling] [operator <|-down-] [variable Apartment][operator :] [keyword Inheritance]",
+    "[variable Dwelling] [operator <|-down-] [variable Commune][operator :] [keyword Inheritance]",
+    "[variable Dwelling] [operator <|-down-] [variable House][operator :] [keyword Inheritance]",
+    "[variable Dwelling] [string \"1\"] [operator *-up-] [string \"many\"] [variable Window][operator :] [keyword Composition]",
+    "[variable Dwelling] [string \"1\"] [operator *-up-] [string \"many\"] [variable Door][operator :] [keyword Composition]"
+  );
+
 })();

@@ -95,7 +95,28 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/class/)){
 					state.name = "class kw";
 					return "keyword";
-				}																	
+				}
+				if (stream.match(/<\|-down-/)){
+					return "operator";	
+				}				
+				if (stream.match(/\*-up-/)){
+					return "operator";	
+				}
+				if (stream.match(/Inheritance/)){
+					return "keyword";
+				}
+				if (stream.match(/Composition/)){
+					return "keyword";
+				}
+				if (stream.match(/:/)){
+					return "operator";
+				}	
+				if (stream.match(/[a-zA-Z][a-zA-Z_0-9]*/)){
+					return "variable";
+				}
+				if (stream.match(/\"[^\"]*\"*/)){
+					return "string";
+				}																						
 				while (stream.next() && !stream.eol()){				
 				}
 				return null;
@@ -241,7 +262,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					return "keyword";
 				}
 				if (stream.match(/[A-Za-z_]+/)) {
-					return "variable";
+					return "def";
 				}																												
 				throw "class kw, blocked on "+stream.peek();				
 			} else {
