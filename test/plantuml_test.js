@@ -68,14 +68,14 @@
   MT("note_with_formatting",
     "[keyword note] [keyword right]",
     "[string This note is on several lines]",
-    "[string ....]",
-    "[string //This line is in italics//]",
-    "[string ----]",
+    "[operator ....]",
+    "[operator //][string This line is in italics][operator //]",
+    "[operator ----]",
     "[string This one contains som <b>HTML</b>]",
-    "[string ====]",
-    "[string * This line contains a bullet]",
-    "[string ____]",
-    "[string \"\" This line is in code block\"\"]",
+    "[operator ====]",
+    "[operator *][string This line contains a bullet]",
+    "[operator ____]",
+    "[operator \"\"][string This line is in code block][operator \"\"]",
     "[keyword end note]"
   );
 
@@ -145,21 +145,21 @@
     "[operator }]"
   );
 
-  /*MT("class_with_stereotype",
-    "class Test << general >> {",
-    "}"
+  MT("class_with_stereotype",
+    "[keyword class] [def Test] [operator <<] [variable general] [operator >>] [operator {]",
+    "[operator }]"
   );
 
   MT("style_on_stereotype",
-    "class System << (S,#FF7700) Singleton >>"
+    "[keyword class] [def System] [operator <<] ([variable S],[string #FF7700]) [variable Singleton] [operator >>]"
   );
 
   MT("multiple_stereotypes",
-    "class Date << (D,orchid) >>"
+    "[keyword class] [def Date] [operator <<] ([variable D],[variable orchid]) [operator >>]"
   );
 
   MT("content_of_class",
-    "class Foo1<Generics tag> {",
+    "[keyword class] [def Foo1]<Generics tag> [operator {]",
     "You can use",
     "several lines",
     "[operator ..]",
@@ -172,7 +172,7 @@
     "as you want",
     "[operator --]",
     "End of class",
-    "}"
+    "[operator {]"
   );
 /*
 class User {

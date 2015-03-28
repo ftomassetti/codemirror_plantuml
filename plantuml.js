@@ -51,7 +51,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/note/)) {
 					state.name = "note init";
 					return "keyword";
-				}
+				}				
 				if (stream.match(/abstract/)){
 					return "keyword";
 				}						
@@ -98,7 +98,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/class/)){
 					state.name = "class kw";
 					return "keyword";
-				}
+				}						
 				if (stream.match(/<\|-down-/)){
 					return "operator";	
 				}				
@@ -156,7 +156,33 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 					state.name = "base";
 					return "keyword";
 				}
-				stream.skipToEnd();
+				if (stream.match(/\.\.\.\./)) {
+					return "operator";
+				}
+				if (stream.match(/----/)) {
+					return "operator";
+				}
+				if (stream.match(/====/)) {
+					return "operator";
+				}
+				if (stream.match(/____/)) {
+					return "operator";
+				}
+				if (stream.match(/\"\"/)) {
+					return "operator";
+				}
+				if (stream.match(/\*/)) {
+					return "operator";
+				}
+				if (stream.match(/\/\//)) {
+					return "operator";
+				}
+				if (stream.match(/[a-zA-Z0-9 \t]+/)) {
+					return "string";
+				}
+				if (stream.match(/./)) {
+					return "string";
+				}																																
 				return "string";
 			} else if (state.name === "skinparam"){
 				if (stream.sol()){
@@ -227,14 +253,40 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				if (stream.match(/[\t ]+/)) {
 					return null;
 				}
-				if (stream.match(/[A-Za-z_]+/)) {
+				if (stream.match(/[A-Za-z_][A-Za-z_0-9]*/)) {
 					return "def";
 				}								
 				if (stream.match(/\{/)){
 					state.name = "class def";
 					return "operator";
 				}
-				throw "class kw, blocked on "+stream.peek();
+				if (stream.match(/<</)) {
+					state.old_state = state.name;
+					state.name = "stereotype";
+					return "operator";
+				}
+				if (stream.match(/<[a-zA-Z ]+>/)) {
+					return "variable";
+				}																	
+				throw "class kw, blocked on '"+stream.peek()+"'";
+			} else if (state.name === "stereotype"){
+				if (stream.match(/[A-Za-z][A-Za-z_0-9]*/)) {
+					return "variable";
+				}
+				if (stream.match(/>>/)) {
+					state.name = state.old_state;
+					return "operator";
+				}
+				if (stream.match(/[\t ]+/)) {
+					return null;
+				}
+				if (stream.match(/\(/)) { return null; }								
+				if (stream.match(/\)/)) { return null; }
+				if (stream.match(/,/)) { return null; }
+				if (stream.match(/#[0-9a-fA-F]{6}/)){
+					return "string";
+				}				
+				throw "stereotype, blocked on '"+stream.peek()+"'";
 			} else if (state.name === "class def"){
 				if (stream.match(/[\t ]+/)) {
 					return null;
@@ -272,8 +324,13 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
 				}
 				if (stream.match(/[A-Za-z_]+/)) {
 					return "def";
-				}																												
-				throw "class kw, blocked on "+stream.peek();				
+				}							
+				if (stream.match(/\.\./)) { return "operator"; }																					
+				if (stream.match(/==/)) { return "operator"; }
+				if (stream.match(/./)) {
+					return null;
+				}
+				throw "class def, blocked on "+stream.peek();				
 			} else {
 				throw "Unknown state "+state.name;
 			}
