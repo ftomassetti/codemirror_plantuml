@@ -118,8 +118,8 @@
 
   MT("classes_firstExample",
     "[keyword class] [def Dwelling] [bracket {]",
-    "  [operator +][keyword Int] [def Windows]",
-    "  [operator +][keyword void] [def Lock][operator ()]",
+    "  [attribute +][builtin Int] [def Windows]",
+    "  [attribute +][keyword void] [def Lock][operator ()]",
     "[bracket }]",
     "",
     "[keyword class] [def Apartment]",
@@ -146,16 +146,16 @@
   );
 
   MT("class_with_stereotype",
-    "[keyword class] [def Test] [operator <<] [variable general] [operator >>] [bracket {]",
+    "[keyword class] [def Test] << [variable general] >> [bracket {]",
     "[bracket }]"
   );
 
   MT("style_on_stereotype",
-    "[keyword class] [def System] [operator <<] ([variable S],[string #FF7700]) [variable Singleton] [operator >>]"
+    "[keyword class] [def System] << ([string S],[atom #FF7700]) [variable Singleton] >>"
   );
 
   MT("multiple_stereotypes",
-    "[keyword class] [def Date] [operator <<] ([variable D],[variable orchid]) [operator >>]"
+    "[keyword class] [def Date] << ([string D],[atom orchid]) >>"
   );
 
   MT("content_of_class",

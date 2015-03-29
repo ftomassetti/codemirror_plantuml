@@ -8,28 +8,62 @@
 <textarea id="demotext">
 @startuml
 
-title Notes - Activity Diagram 
+title Types - Class Diagram
 
 
-start
+skinparam componentStyle uml2
 
-:Eat Hot Wings;
+abstract class AbstractList {
 
-note right
-  This note is on several lines
-  ....
-  //This line is in italics//
-  ----
-  This one contains som <b>HTML</b>
-  ====
-  * This line contains a bullet
-  ____
-  "" This line is in code block""
-end note
+}
 
-:Drink Homebrew;
+class Test << general >> {
+}
 
-stop
+class System << (S,#FF7700) Singleton >>
+class Date << (D,orchid) >>
+
+class Foo1<Generics tag> {
+  You can use
+  several lines
+  ..
+  as you want
+  and group
+  ==
+  things together.
+  __
+  You can have as many groups
+  as you want
+  --
+  End of class
+}
+
+class User {
+  .. Simple Getter ..
+  + getName() : String
+  + getAddress() : Address
+  .. Some setter ..
+  + setName() : String
+  __ private data __
+  -int age
+  -- crypted --
+  -String password
+}
+
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+
+interface List {
+
+}
+
+annotation SuppressWarnings
+
+class Object << general >>
+Object <|--- ArrayList
 
 @enduml
 </textarea>
