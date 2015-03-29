@@ -159,7 +159,7 @@
   );
 
   MT("content_of_class",
-    "[keyword class] [def Foo1]<Generics tag> [bracket {]",
+    "[keyword class] [def Foo1][string <Generics tag>] [bracket {]",
     "You can use",
     "several lines",
     "[operator ..]",
@@ -172,20 +172,24 @@
     "as you want",
     "[operator --]",
     "End of class",
-    "[bracket {]"
+    "[bracket }]"
+  );
+
+  MT("class_with_methods",
+    "[keyword class] User [bracket {]",
+    "[operator ..] [string Simple Getter] [operator ..]",
+    "[attribute +] [def getName]() [operator :] [variable String]",
+    "[attribute +] [def getAddress]() [operator :] [variable Address]",
+    "[operator ..] [string Some setter] [operator ..]",
+    "[attribute +] [def setName]() [operator :] [variable String]",
+    "[operator __] [string private data] [operator __]",
+    "[attribute -][builtin int] [def age]",
+    "[operator --] [string crypted ][operator --]",
+    "[attribute -][variable String] [def password]",
+    "[bracket }]"
   );
 /*
-class User {
-  .. Simple Getter ..
-  + getName() : String
-  + getAddress() : Address
-  .. Some setter ..
-  + setName() : String
-  __ private data __
-  -int age
-  -- crypted --
-  -String password
-}
+
 
 enum TimeUnit {
   DAYS

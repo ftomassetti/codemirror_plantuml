@@ -279,7 +279,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     return null;
                 }
                 if (stream.match(/<[a-zA-Z ]+>/)) {
-                    return "variable";
+                    return "string";
                 }                                                                   
                 throw "class kw, blocked on '"+stream.peek()+"'";
             } else if (state.name === "stereotype"){                
@@ -322,10 +322,16 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "base";
                     return "bracket";
                 }
+                if (stream.match(/\.\./)) { return "operator"; }                                                                                    
+                if (stream.match(/==/)) { return "operator"; }                
+                if (stream.match(/--/)) { return "operator"; }
+                if (stream.match(/__/)) { return "operator"; }
                 if (stream.match(/\+/)) {
+                	state.name = "class def attribute";
                     return "attribute";
                 }   
                 if (stream.match(/-/)) {
+                	state.name = "class def attribute";
                     return "attribute";
                 }
                 if (stream.match(/#/)) {
@@ -333,13 +339,19 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 }
                 if (stream.match(/~/)) {
                     return "operator";
+                }               
+                if (stream.match(/./)) {
+                    return null;
                 }
-                if (stream.match(/\(/)) {
-                    return "operator";
-                }
-                if (stream.match(/\)/)) {
-                    return "operator";
-                }
+                throw "class def, blocked on "+stream.peek();               
+            } else if (state.name === "class def attribute"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }            	
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                 	
                 if (stream.match(/void/)) {
                     return "keyword";
                 }
@@ -351,13 +363,14 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 }
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "def";
-                }                           
-                if (stream.match(/\.\./)) { return "operator"; }                                                                                    
-                if (stream.match(/==/)) { return "operator"; }
-                if (stream.match(/./)) {
-                    return null;
+                }  
+                if (stream.match(/\(/)) {
+                    return "operator";
                 }
-                throw "class def, blocked on "+stream.peek();               
+                if (stream.match(/\)/)) {
+                    return "operator";
+                }                
+                throw "class def attribute, blocked on "+stream.peek();                                     	
             } else {
                 throw "Unknown state "+state.name;
             }
