@@ -213,34 +213,43 @@
   MT("extension_relation",
     "[variable Object] [operator <|---] [variable ArrayList]"
   );
+
+  MT("title with a slash",
+    "[keyword title][string Properties / Methods - Class Diagram]"
+  );
+
+  MT("advanced class fields",
+    "[keyword class] [def Car] [bracket {]",
+    "  [operator ..][string Field Examples ][operator ..]",
+    "  [attribute -][def Name][operator :] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute +][def Name][operator :] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute #][def Name][operator :] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute ~][def Name][operator :] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]"
+  );
+
+  MT("advanced class methods",
+    "[keyword class] [def Car] [bracket {]",
+    "  [operator ..][string Method Examples ][operator ..]",
+    "  [attribute -][def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute +][def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute #][def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]",
+    "  [attribute ~][def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]"
+  );
+
+  MT("static class methods",
+    "[keyword class] [def Car] [bracket {]",
+    "  [operator ..][string Method Examples ][operator ..]",
+    "  [attribute +][keyword {static}] [def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]"
+  );     
+
+  MT("abstract class methods",
+    "[keyword class] [def Car] [bracket {]",
+    "  [operator ..][string Method Examples ][operator ..]",
+    "  [attribute +][keyword {abstract}] [def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]"
+  );      
 /*
 
 /*
-@startuml
-
-title Properties / Methods - Class Diagram
-
-
-skinparam componentStyle uml2
-class Car {
-  .. Field Examples ..
-- Name: Type { arg1, arg2, argn }
-+Name: Type { arg1, arg2, argn }
-#Name: Type { arg1, arg2, argn }
-~Name: Type { arg1, arg2, argn }
-
-  .. Method Examples ..
--Name(): Type { arg1, arg2, argn }
-+Name(): Type { arg1, arg2, argn }
-#Name(): Type { arg1, arg2, argn }
-~Name(): Type { arg1, arg2, argn }
-
-  .. Static Example ..
-+{static} Name(): Type { arg1, arg2, argn }
-
-  .. Abstract Example ..
-+{abstract} Name(): Type { arg1, arg2, argn }
-}
 
 class Car
 ICar ()- Car
