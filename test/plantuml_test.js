@@ -176,7 +176,7 @@
   );
 
   MT("class_with_methods",
-    "[keyword class] User [bracket {]",
+    "[keyword class] [def User] [bracket {]",
     "[operator ..] [string Simple Getter] [operator ..]",
     "[attribute +] [def getName]() [operator :] [variable String]",
     "[attribute +] [def getAddress]() [operator :] [variable Address]",
@@ -188,22 +188,114 @@
     "[attribute -][variable String] [def password]",
     "[bracket }]"
   );
+
+  MT("enum", 
+    "[keyword enum] [def TimeUnit] [bracket {]",
+    "  [def DAYS]",
+    "  [def HOURS]",
+    "  [def MINUTES]",
+    "[bracket }]"
+  );
+
+  MT("interface",
+    "[keyword interface] [def List] [bracket {]",
+    "[bracket }]"
+  );
+
+  MT("annotation",
+    "[keyword annotation] [def SuppressWarnings]"
+  );  
+
+  MT("class_inline_with_stereotype",
+    "[keyword class] [def Object] << [variable general] >>"
+  );
+
+  MT("extension_relation",
+    "[variable Object] [operator <|---] [variable ArrayList]"
+  );
 /*
 
+/*
+@startuml
 
-enum TimeUnit {
-  DAYS
-  HOURS
-  MINUTES
+title Properties / Methods - Class Diagram
+
+
+skinparam componentStyle uml2
+class Car {
+  .. Field Examples ..
+- Name: Type { arg1, arg2, argn }
++Name: Type { arg1, arg2, argn }
+#Name: Type { arg1, arg2, argn }
+~Name: Type { arg1, arg2, argn }
+
+  .. Method Examples ..
+-Name(): Type { arg1, arg2, argn }
++Name(): Type { arg1, arg2, argn }
+#Name(): Type { arg1, arg2, argn }
+~Name(): Type { arg1, arg2, argn }
+
+  .. Static Example ..
++{static} Name(): Type { arg1, arg2, argn }
+
+  .. Abstract Example ..
++{abstract} Name(): Type { arg1, arg2, argn }
 }
 
-interface List {
+class Car
+ICar ()- Car
+ICar2 ()-- Car
+Car -() ICar3
 
+@enduml
+*/
+
+/*
+@startuml
+
+title Interfaces - Class Diagram
+
+
+class Car
+ICar ()- Car
+ICar2 ()-- Car
+Car -() ICar3
+
+@enduml
+*/
+
+
+/*
+@startuml
+
+title Packages - Class Diagram
+
+
+package Node <<[builtin Node]>> {
+  class Worker1
 }
 
-annotation SuppressWarnings
+package Rectangle <<[builtin Rect]>> {
+  class Worker2
+}
 
-class Object << general >>
-Object <|--- ArrayList*/
+package Folder <<[builtin Folder]>> {
+  class Worker3
+}
+
+package Frame <<[builtin Frame]>> {
+  class Worker4
+}
+
+package Internet <<[builtin Cloud]>> {
+  class Worker5
+}
+
+package Database <<[builtin Database]>> {
+  class Worker6
+}
+
+@enduml
+*/
 
 })();
