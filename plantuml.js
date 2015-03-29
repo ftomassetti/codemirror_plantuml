@@ -1,6 +1,7 @@
 /*
  * CodeMirror mode for PlantUML
- * Written by Federico Tomassetti (http://tomassetti.me)
+ *
+ * Written by Federico Tomassetti (https://github.com/ftomassetti, http://tomassetti.me)
  */
 
 (function(mod) {
@@ -35,7 +36,24 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
             return "atom";
         }        
         return undefined;
-    }
+    };
+
+    var isMethod = function(stream) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (stream.eol()){
+                stream.backUp(i);
+                return false;
+            };
+            if (stream.peek() === '(') {
+                stream.backUp(i);
+                return true;                
+            }
+            i += 1;
+            readSoFar = readSoFar + stream.next();
+        };
+    };
 
     return {
 
@@ -378,11 +396,19 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     return "operator"; 
                 }
                 if (stream.match(/\+/)) {
-                	state.name = "class def attribute";
+                    if (isMethod(stream)) {                  
+                	   state.name = "class def method";
+                    } else {
+                        state.name = "class def attribute";
+                    }
                     return "attribute";
                 }   
                 if (stream.match(/-/)) {
-                	state.name = "class def attribute";
+                    if (isMethod(stream)) {                  
+                       state.name = "class def method";
+                    } else {
+                        state.name = "class def attribute";
+                    }
                     return "attribute";
                 }
                 if (stream.match(/#/)) {
@@ -446,6 +472,46 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/[\t ]+/)) {
                     return null;
                 }                 	
+                if (stream.match(/Int/)) {
+                    state.name = "class def attribute after type";
+                    return "builtin";
+                }
+                if (stream.match(/int/)) {
+                    state.name = "class def attribute after type";
+                    return "builtin";
+                }                
+                if (stream.match(/Float/)) {
+                    state.name = "class def attribute after type";
+                    return "builtin";
+                }
+                if (stream.match(/float/)) {
+                    state.name = "class def attribute after type";
+                    return "builtin";
+                }                
+                if (stream.match(/[A-Za-z_]+/)) {
+                    state.name = "class def attribute after type";
+                    return "variable";
+                }                           
+                throw "class def attribute, blocked on "+stream.peek();
+            } else if (state.name === "class def attribute after type"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                   
+                if (stream.match(/[A-Za-z_]+/)) {
+                    return "def";
+                }                                 
+            } else if (state.name === "class def method"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                   
                 if (stream.match(/void/)) {
                     return "keyword";
                 }
@@ -474,7 +540,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "class def return type";
                     return "operator";
                 }                                
-                throw "class def attribute, blocked on "+stream.peek();
+                throw "class def attribute, blocked on "+stream.peek();                
             } else if (state.name === "class def return type"){
                 if (stream.sol()){
                     state.name = "class def"
