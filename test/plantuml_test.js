@@ -177,14 +177,14 @@
 
   MT("class_with_methods",
     "[keyword class] [def User] [bracket {]",
-    "[operator ..] [string Simple Getter] [operator ..]",
-    "[attribute +] [def getName]() [operator :] [variable String]",
-    "[attribute +] [def getAddress]() [operator :] [variable Address]",
-    "[operator ..] [string Some setter] [operator ..]",
-    "[attribute +] [def setName]() [operator :] [variable String]",
-    "[operator __] [string private data] [operator __]",
+    "[operator ..][string  Simple Getter ][operator ..]",
+    "[attribute +] [def getName][operator ()] [operator :] [variable String]",
+    "[attribute +] [def getAddress][operator ()] [operator :] [variable Address]",
+    "[operator ..][string  Some setter ][operator ..]",
+    "[attribute +] [def setName][operator ()] [operator :] [variable String]",
+    "[operator __][string  private data ][operator __]",
     "[attribute -][builtin int] [def age]",
-    "[operator --] [string crypted ][operator --]",
+    "[operator --][string  crypted ][operator --]",
     "[attribute -][variable String] [def password]",
     "[bracket }]"
   );

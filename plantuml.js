@@ -361,10 +361,22 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "base";
                     return "bracket";
                 }
-                if (stream.match(/\.\./)) { return "operator"; }                                                                                    
-                if (stream.match(/==/)) { return "operator"; }                
-                if (stream.match(/--/)) { return "operator"; }
-                if (stream.match(/__/)) { return "operator"; }
+                if (stream.match(/\.\./)) { 
+                    state.name = "class def section";
+                    return "operator"; 
+                }                                                                                    
+                if (stream.match(/==/)) { 
+                    state.name = "class def section";
+                    return "operator"; 
+                }      
+                if (stream.match(/--/)) { 
+                    state.name = "class def section";
+                    return "operator"; 
+                }
+                if (stream.match(/__/)) { 
+                    state.name = "class def section";
+                    return "operator"; 
+                }
                 if (stream.match(/\+/)) {
                 	state.name = "class def attribute";
                     return "attribute";
@@ -383,6 +395,30 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     return null;
                 }
                 throw "class def, blocked on "+stream.peek();
+            } else if (state.name === "class def section") {
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }                      
+                if (stream.match(/\.\./)) { 
+                    state.name = "class def"
+                    return "operator"; 
+                }                                                                                    
+                if (stream.match(/==/)) { 
+                    state.name = "class def"
+                    return "operator"; 
+                }                
+                if (stream.match(/--/)) { 
+                    state.name = "class def"
+                    return "operator"; 
+                }
+                if (stream.match(/__/)) { 
+                    state.name = "class def"
+                    return "operator"; 
+                }        
+                if (stream.match(/[a-zA-Z0-9 \t]+/)) {
+                    return "string";
+                }                        
             } else if (state.name === "enum def"){
                 if (stream.match(/[\t ]+/)) {
                     return null;
@@ -416,9 +452,15 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/Int/)) {
                     return "builtin";
                 }
+                if (stream.match(/int/)) {
+                    return "builtin";
+                }                
                 if (stream.match(/Float/)) {
                     return "builtin";
                 }
+                if (stream.match(/float/)) {
+                    return "builtin";
+                }                
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "def";
                 }  
@@ -429,9 +471,30 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     return "operator";
                 }
                 if (stream.match(/:/)) {
+                    state.name = "class def return type";
                     return "operator";
                 }                                
-                throw "class def attribute, blocked on "+stream.peek();                                     	
+                throw "class def attribute, blocked on "+stream.peek();
+            } else if (state.name === "class def return type"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                   
+                if (stream.match(/void/)) {
+                    return "keyword";
+                }
+                if (stream.match(/Int/)) {
+                    return "builtin";
+                }
+                if (stream.match(/Float/)) {
+                    return "builtin";
+                }
+                if (stream.match(/[A-Za-z_]+/)) {
+                    return "variable";
+                }                                                                  	
             } else {
                 throw "Unknown state "+state.name;
             }
