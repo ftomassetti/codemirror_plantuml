@@ -47,13 +47,45 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 return false;
             };
             if (stream.peek() === '(') {
-                stream.backUp(i);
+                stream.backUp(i);                
                 return true;                
             }
             i += 1;
             readSoFar = readSoFar + stream.next();
         };
     };
+
+    var restOfLine = function(stream) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (stream.eol()){
+                stream.backUp(i);
+                return readSoFar;
+            };            
+            i += 1;
+            readSoFar = readSoFar + stream.next();
+        };
+    };    
+
+    var hasTypeAfter = function(stream) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (stream.eol()){
+                stream.backUp(i);
+                console.log("hasTypeAfter? "+readSoFar+" -> false");
+                return false;
+            };
+            if (stream.peek() === ':') {
+                stream.backUp(i);
+                console.log("hasTypeAfter? "+readSoFar+" -> false");                
+                return true;                
+            }
+            i += 1;
+            readSoFar = readSoFar + stream.next();
+        };
+    };    
 
     return {
 
@@ -399,7 +431,11 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     if (isMethod(stream)) {                  
                 	   state.name = "class def method";
                     } else {
-                        state.name = "class def attribute";
+                        if (hasTypeAfter(stream)) {
+                            state.name = "class def attribute (type after)";
+                        } else {
+                            state.name = "class def attribute";
+                        }
                     }
                     return "attribute";
                 }   
@@ -407,15 +443,37 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     if (isMethod(stream)) {                  
                        state.name = "class def method";
                     } else {
-                        state.name = "class def attribute";
+                        if (hasTypeAfter(stream)) {
+                            state.name = "class def attribute (type after)";
+                        } else {
+                            state.name = "class def attribute";
+                        }
                     }
                     return "attribute";
                 }
                 if (stream.match(/#/)) {
-                    return "operator";
+                    if (isMethod(stream)) {                  
+                       state.name = "class def method";
+                    } else {
+                        if (hasTypeAfter(stream)) {
+                            state.name = "class def attribute (type after)";
+                        } else {
+                            state.name = "class def attribute";
+                        }
+                    }
+                    return "attribute";
                 }
                 if (stream.match(/~/)) {
-                    return "operator";
+                    if (isMethod(stream)) {                  
+                       state.name = "class def method";
+                    } else {
+                        if (hasTypeAfter(stream)) {
+                            state.name = "class def attribute (type after)";
+                        } else {
+                            state.name = "class def attribute";
+                        }
+                    }
+                    return "attribute";
                 }               
                 if (stream.match(/./)) {
                     return null;
@@ -491,8 +549,22 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/[A-Za-z_]+/)) {
                     state.name = "class def attribute after type";
                     return "variable";
-                }                           
-                throw "class def attribute, blocked on "+stream.peek();
+                }                                 
+            } else if (state.name === "class def attribute (type after)"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                       
+                if (stream.match(/[A-Za-z_]+/)) {
+                    return "def";
+                }            
+                if (stream.match(/:/)) {
+                    state.name = "class def attribute var type";
+                    return "operator";
+                }                                       
             } else if (state.name === "class def attribute after type"){
                 if (stream.sol()){
                     state.name = "class def"
@@ -503,7 +575,40 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 }                   
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "def";
-                }                                 
+                }            
+            } else if (state.name === "class def attribute var type"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                   
+                if (stream.match(/[A-Za-z_][A-Za-z_1-9]+/)) {
+                    return "variable";
+                }   
+                if (stream.match(/\{/)) {
+                    state.name = "class def attribute return type arg list";
+                    return "bracket";
+                }                  
+            } else if (state.name === "class def attribute return type arg list"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }                   
+                if (stream.match(/\}/)) {
+                    state.name = "class def attribute (type after)";
+                    return "bracket";
+                }                
+                if (stream.match(/[A-Za-z_][A-Za-z_1-9]+/)) {
+                    return "variable";
+                }
+                if (stream.match(/,/)) {
+                    return null;
+                }                                                         
             } else if (state.name === "class def method"){
                 if (stream.sol()){
                     state.name = "class def"
@@ -539,8 +644,13 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/:/)) {
                     state.name = "class def return type";
                     return "operator";
-                }                                
-                throw "class def attribute, blocked on "+stream.peek();                
+                }                
+                if (stream.match(/\{static\}/)) {
+                    return "keyword";
+                }
+                if (stream.match(/{abstract}/)) {
+                    return "keyword";
+                }                                                   
             } else if (state.name === "class def return type"){
                 if (stream.sol()){
                     state.name = "class def"
@@ -560,10 +670,48 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 }
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "variable";
-                }                                                                  	
+                }
+                if (stream.match(/\{/)) {
+                    state.name = "class def return type, type parameters";
+                    return "bracket";
+                }            
+
+            //
+            // Example: +Name(): Type { arg1, arg2, argn }
+            //          this is the state between brackets
+            // 
+
+            } else if (state.name === "class def return type, type parameters"){
+                if (stream.sol()){
+                    state.name = "class def"
+                    return null;
+                }               
+                if (stream.match(/[\t ]+/)) {
+                    return null;
+                }
+                if (stream.match(/,/)) {
+                    return null;
+                }                    
+                if (stream.match(/void/)) {
+                    return "keyword";
+                }
+                if (stream.match(/Int/)) {
+                    return "builtin";
+                }
+                if (stream.match(/Float/)) {
+                    return "builtin";
+                }
+                if (stream.match(/[A-Za-z_][A-Za-z_0-9]+/)) {
+                    return "variable";
+                }
+                if (stream.match(/\}/)) {
+                    state.name = "class def return type";
+                    return "bracket";
+                }                                                                                                      	
             } else {
                 throw "Unknown state "+state.name;
             }
+            throw "["+state.name+"] blocked on '"+stream.peek()+"'. Rest of line '"+restOfLine(stream)+"'";
         }
     };
 });
