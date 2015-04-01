@@ -20,6 +20,25 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
         return false;
     }
 
+    var parseType = function(stream) {
+        if (stream.match(/void/)) {
+            return "keyword";
+        }
+        if (stream.match(/Int/)) {
+            return "builtin";
+        }
+        if (stream.match(/int/)) {
+            return "builtin";
+        }                
+        if (stream.match(/Float/)) {
+            return "builtin";
+        }
+        if (stream.match(/float/)) {
+            return "builtin";
+        }              
+        return null;
+    }
+
     var matchColors = function(stream, state) {
         if (stream.match(/Blue/)){
             return "atom";
@@ -292,15 +311,9 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/backgroundColor/)){
                     return "attribute";
                 }
-                if (stream.match(/componentStyle/)){
+                if (stream.match(/componentStyle|uml2|activity/)){
                     return "keyword";
                 }
-                if (stream.match(/uml2/)){
-                    return "keyword";
-                }                           
-                if (stream.match(/activity/)){
-                    return "keyword";
-                }               
                 if (matchColors(stream, state)){
                     return "atom";
                 }
@@ -313,16 +326,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "base"
                     return "bracket";
                 }                   
-                if (stream.match(/StartColor/)){
-                    return "attribute";
-                }
-                if (stream.match(/EndColor/)){
-                    return "attribute";
-                }
-                if (stream.match(/BackgroundColor/)){
-                    return "attribute";
-                }
-                if (stream.match(/BorderColor/)){
+                if (stream.match(/StartColor|EndColor|BackgroundColor|BorderColor/)){
                     return "attribute";
                 }
                 if (matchColors(stream, state)){
@@ -477,23 +481,12 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.sol()){
                     state.name = "class def"
                     return null;
-                }            	             	
-                if (stream.match(/Int/)) {
+                }    
+                var pt = parseType(stream);
+                if (pt){
                     state.name = "class def attribute after type";
-                    return "builtin";
-                }
-                if (stream.match(/int/)) {
-                    state.name = "class def attribute after type";
-                    return "builtin";
-                }                
-                if (stream.match(/Float/)) {
-                    state.name = "class def attribute after type";
-                    return "builtin";
-                }
-                if (stream.match(/float/)) {
-                    state.name = "class def attribute after type";
-                    return "builtin";
-                }                
+                    return pt;
+                }        	             	
                 if (stream.match(/[A-Za-z_]+/)) {
                     state.name = "class def attribute after type";
                     return "variable";
@@ -549,22 +542,11 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.sol()){
                     state.name = "class def"
                     return null;
-                }                                
-                if (stream.match(/void/)) {
-                    return "keyword";
                 }
-                if (stream.match(/Int/)) {
-                    return "builtin";
-                }
-                if (stream.match(/int/)) {
-                    return "builtin";
-                }                
-                if (stream.match(/Float/)) {
-                    return "builtin";
-                }
-                if (stream.match(/float/)) {
-                    return "builtin";
-                }                
+                var pt = parseType(stream);
+                if (pt){
+                    return pt;
+                }                                          
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "def";
                 }  
@@ -589,15 +571,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "class def"
                     return null;
                 }                             
-                if (stream.match(/void/)) {
-                    return "keyword";
-                }
-                if (stream.match(/Int/)) {
-                    return "builtin";
-                }
-                if (stream.match(/Float/)) {
-                    return "builtin";
-                }
+                var pt = parseType(stream);
+                if (pt){
+                    return pt;
+                } 
                 if (stream.match(/[A-Za-z_]+/)) {
                     return "variable";
                 }
@@ -619,15 +596,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/,/)) {
                     return null;
                 }                    
-                if (stream.match(/void/)) {
-                    return "keyword";
-                }
-                if (stream.match(/Int/)) {
-                    return "builtin";
-                }
-                if (stream.match(/Float/)) {
-                    return "builtin";
-                }
+                var pt = parseType(stream);
+                if (pt){
+                    return pt;
+                } 
                 if (stream.match(/[A-Za-z_][A-Za-z_0-9]+/)) {
                     return "variable";
                 }
@@ -642,9 +614,6 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
             //
 
             } else if (state.name === "WaitingForPackageName"){
-                if (stream.match(/[\t ]+/)) {
-                    return null;
-                }
                 if (stream.match(/[A-Za-z_][A-Za-z_0-9]+/)) {
                     return "def";
                 }                                              
