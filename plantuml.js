@@ -384,9 +384,6 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = state.old_state;
                     return null;
                 }
-                if (stream.match(/[\t ]+/)) {
-                    return null;
-                }
                 if (stream.match(/,/)) { return null; }             
             } else if (state.name === "stereotype style"){
                 if (stream.match(/\)/)) {
