@@ -246,65 +246,49 @@
     "[keyword class] [def Car] [bracket {]",
     "  [operator ..][string Method Examples ][operator ..]",
     "  [attribute +][keyword {abstract}] [def Name][operator ():] [variable Type] [bracket {] [variable arg1], [variable arg2], [variable argn] [bracket }]"
-  );      
-/*
+  );
 
-/*
+  MT("interfaces examples",
+    "[keyword class] [def Car]",
+    "[variable ICar] [operator ()-] [variable Car]",
+    "[variable ICar2] [operator ()--] [variable Car]",
+    "[variable Car] [operator -()] [variable ICar3]"
+  );
 
-class Car
-ICar ()- Car
-ICar2 ()-- Car
-Car -() ICar3
+  MT("node package",
+    "[keyword package] [def Node] <<[builtin Node]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );
 
-@enduml
-*/
+  MT("rect package",
+    "[keyword package] [def Node] <<[builtin Rect]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );
 
-/*
-@startuml
+  MT("folder package",
+    "[keyword package] [def Node] <<[builtin Folder]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );
 
-title Interfaces - Class Diagram
+  MT("frame package",
+    "[keyword package] [def Node] <<[builtin Frame]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );   
 
+  MT("cloud package",
+    "[keyword package] [def Node] <<[builtin Cloud]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );    
 
-class Car
-ICar ()- Car
-ICar2 ()-- Car
-Car -() ICar3
-
-@enduml
-*/
-
-
-/*
-@startuml
-
-title Packages - Class Diagram
-
-
-package Node <<[builtin Node]>> {
-  class Worker1
-}
-
-package Rectangle <<[builtin Rect]>> {
-  class Worker2
-}
-
-package Folder <<[builtin Folder]>> {
-  class Worker3
-}
-
-package Frame <<[builtin Frame]>> {
-  class Worker4
-}
-
-package Internet <<[builtin Cloud]>> {
-  class Worker5
-}
-
-package Database <<[builtin Database]>> {
-  class Worker6
-}
-
-@enduml
-*/
+  MT("database package",
+    "[keyword package] [def Node] <<[builtin Database]>> [bracket {]",
+    "    [keyword class] [def Worker1]",
+    "[bracket }]"
+  );     
 
 })();
