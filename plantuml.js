@@ -596,21 +596,9 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/Node/)) {
                     return "builtin";
                 } 
-                if (stream.match(/Frame/)) {
+                if (keywords(stream, ['Frame', 'Database', 'Cloud', 'Rect', 'Folder'])) {
                     return "builtin";
-                }
-                if (stream.match(/Database/)) {
-                    return "builtin";
-                } 
-                if (stream.match(/Cloud/)) {
-                    return "builtin";
-                }
-                if (stream.match(/Rect/)) {
-                    return "builtin";
-                } 
-                if (stream.match(/Folder/)) {
-                    return "builtin";
-                }                                                             
+                }                                                           
                 if (stream.match(/[A-Za-z_][A-Za-z_0-9]+/)) {
                     return "variable";
                 }    
