@@ -114,22 +114,6 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
         return (c >= '0' && c <= '9') || isLetter;
     };
 
-    var keyword = function(stream, keyword) {
-        var i = 0;
-        var readSoFar = "";
-        while (true) {
-            if (readSoFar === keyword && (stream.eol() || !stream.peek() || !isAlphaNum(stream.peek())))  {
-                return true;                
-            }
-            if (stream.eol() || !stream.peek() || stream.peek()===' ' || stream.peek()==='\t'){
-                stream.backUp(i);
-                return false;
-            };            
-            readSoFar = readSoFar + stream.next();
-            i += 1;
-        };
-    };
-
     var matchAny = function(readSoFar, keywords) {
         var index;
         for (index = 0; index < keywords.length; ++index) {
