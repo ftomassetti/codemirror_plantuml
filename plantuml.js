@@ -106,7 +106,55 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
             i += 1;
             readSoFar = readSoFar + stream.next();
         };
-    };    
+    };
+
+    var isAlphaNum = function(c) {
+        // only letters change
+        var isLetter = c.toUpperCase() != c.toLowerCase();        
+        return (c >= '0' && c <= '9') || isLetter;
+    };
+
+    var keyword = function(stream, keyword) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (readSoFar === keyword && (stream.eol() || !stream.peek() || !isAlphaNum(stream.peek())))  {
+                return true;                
+            }
+            if (stream.eol() || !stream.peek() || stream.peek()===' ' || stream.peek()==='\t'){
+                stream.backUp(i);
+                return false;
+            };            
+            readSoFar = readSoFar + stream.next();
+            i += 1;
+        };
+    };
+
+    var matchAny = function(readSoFar, keywords) {
+        var index;
+        for (index = 0; index < keywords.length; ++index) {
+            if (keywords[index] === readSoFar) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    var keywords = function(stream, keywords) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (matchAny(readSoFar, keywords) && (stream.eol() || !stream.peek() || !isAlphaNum(stream.peek())))  {
+                return true;                
+            }
+            if (stream.eol() || !stream.peek() || stream.peek()===' ' || stream.peek()==='\t'){
+                stream.backUp(i);
+                return false;
+            };            
+            readSoFar = readSoFar + stream.next();
+            i += 1;
+        };
+    };
 
     return {
 
@@ -118,23 +166,22 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
             };
         },
         token: function(stream, state) {
+
+            //
+            // This is the initial state
+            //     
+
             if (state.name === "base"){
-                if (stream.match(/@startuml/)) {
+                if (keywords(stream, ['@startuml', '@enduml', 'start', 'stop',
+                    'abstract', 'if', 'then', 'else', 'endif',
+                    'repeat', 'while', 'endwhile', 'is', 'fork', 'again', 'end',
+                    'Inheritance', 'Composition'])) {
                     return "keyword";
                 }
-                if (stream.match(/@enduml/)) {
-                    return "keyword";
-                }           
                 if (stream.match(/title/)) {
                     state.name = "title";
                     return "keyword";
                 }
-                if (stream.match(/start/)) {
-                    return "keyword";
-                }
-                if (stream.match(/stop/)) {
-                    return "keyword";
-                }                       
                 // a state
                 if (stream.match(/:[a-zA-Z _!?]*;/)) {
                     return "def";
@@ -142,43 +189,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/note/)) {
                     state.name = "note init";
                     return "keyword";
-                }               
-                if (stream.match(/abstract/)){
-                    return "keyword";
-                }                       
-                if (stream.match(/if/)){
-                    return "keyword";
-                }                   
-                if (stream.match(/then/)){
-                    return "keyword";
-                }                   
-                if (stream.match(/else/)){
-                    return "keyword";
-                }
-                if (stream.match(/endif/)){
-                    return "keyword";
-                }           
-                if (stream.match(/repeat/)){
-                    return "keyword";
-                }
-                if (stream.match(/while/)){
-                    return "keyword";
-                }
-                if (stream.match(/endwhile/)){
-                    return "keyword";
-                }
-                if (stream.match(/is/)){
-                    return "keyword";
-                }
-                if (stream.match(/fork/)){
-                    return "keyword";
-                }               
-                if (stream.match(/again/)){
-                    return "keyword";
-                }               
-                if (stream.match(/end/)){
-                    return "keyword";
-                }                               
+                }                                         
                 if (stream.match(/\(\)--/)){
                     return "operator";  
                 }
@@ -223,12 +234,6 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/<\|---/)){
                     return "operator";  
                 }                                                                             
-                if (stream.match(/Inheritance/)){
-                    return "keyword";
-                }
-                if (stream.match(/Composition/)){
-                    return "keyword";
-                }
                 if (stream.match(/:/)){
                     return "operator";
                 }
@@ -255,13 +260,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.sol()){
                     state.name = "note body"
                     return null;
-                }           
-                if (stream.match(/left/)) {
-                    return "keyword";
                 }
-                if (stream.match(/right/)) {
+                if (keywords(stream, ['left', 'right'])) {
                     return "keyword";
-                }
+                }                
                 if (stream.match(/:/)){
                     state.name = "note body inline";
                     return "operator";
@@ -557,12 +559,9 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "class def return type";
                     return "operator";
                 }                
-                if (stream.match(/\{static\}/)) {
+                if (keywords(stream, ['{static}', '{abstract}'])) {
                     return "keyword";
-                }
-                if (stream.match(/{abstract}/)) {
-                    return "keyword";
-                }                                                   
+                }  
             } else if (state.name === "class def return type"){
                 if (stream.sol()){
                     state.name = "class def"

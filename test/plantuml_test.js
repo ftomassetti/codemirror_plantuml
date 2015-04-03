@@ -14,6 +14,14 @@
   	test.mode(name, modeHighlightFormatting, Array.prototype.slice.call(arguments, 1)); 
   }
 
+  MT("typing @startuml",
+    "@",
+    "@s",
+    "@startum",
+    "[keyword @startuml]",
+    "@startumlplusothercharacters"
+  );
+
   MT("activityDiagram_example1",
      "[keyword @startuml]",
      "",
