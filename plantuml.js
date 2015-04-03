@@ -140,6 +140,24 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
         };
     };
 
+    // The problem is that it should keep looking for other longer matches
+    // for example: '()-' and '()--', as it match the first one it should keep going
+    var operators = function(stream, keywords) {
+        var i = 0;
+        var readSoFar = "";
+        while (true) {
+            if (matchAny(readSoFar, keywords) && (stream.eol() || !stream.peek() || isAlphaNum(stream.peek()) || stream.peek()===' ' || stream.peek()==='\t'))  {
+                return true;                
+            }
+            if (stream.eol() || !stream.peek() || stream.peek()===' ' || stream.peek()==='\t'){
+                stream.backUp(i);
+                return false;
+            };            
+            readSoFar = readSoFar + stream.next();
+            i += 1;
+        };
+    };    
+
     return {
 
         startState: function() {
@@ -173,19 +191,10 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/note/)) {
                     state.name = "note init";
                     return "keyword";
-                }                                         
-                if (stream.match(/\(\)--/)){
-                    return "operator";  
+                }             
+                if (operators(stream, ['--()', '-()', '()-', '()--', '<|---', ':', '*-up-', '<|-down-'])){
+                    return "operator";
                 }
-                if (stream.match(/\(\)-/)){
-                    return "operator";  
-                }
-                if (stream.match(/--\(\)/)){
-                    return "operator";  
-                }
-                if (stream.match(/-\(\)/)){
-                    return "operator";  
-                }                                                            
                 if (stream.match(/\([a-zA-Z _!?]*\)/)){
                     return "string";
                 }   
@@ -208,19 +217,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                 if (stream.match(/annotation/)){
                     state.name = "class kw";
                     return "keyword";
-                }                                              
-                if (stream.match(/<\|-down-/)){
-                    return "operator";  
-                }               
-                if (stream.match(/\*-up-/)){
-                    return "operator";  
-                }
-                if (stream.match(/<\|---/)){
-                    return "operator";  
-                }                                                                             
-                if (stream.match(/:/)){
-                    return "operator";
-                }
+                }                                                                                                
                 if (stream.match(/package/)){
                     state.name = "WaitingForPackageName";
                     return "keyword";
@@ -261,25 +258,7 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     state.name = "base";
                     return "keyword";
                 }
-                if (stream.match(/\.\.\.\./)) {
-                    return "operator";
-                }
-                if (stream.match(/----/)) {
-                    return "operator";
-                }
-                if (stream.match(/====/)) {
-                    return "operator";
-                }
-                if (stream.match(/____/)) {
-                    return "operator";
-                }
-                if (stream.match(/\"\"/)) {
-                    return "operator";
-                }
-                if (stream.match(/\*/)) {
-                    return "operator";
-                }
-                if (stream.match(/\/\//)) {
+                if (operators(stream, ['....', '----', '====', '____', '""', '*', '//'])){
                     return "operator";
                 }
                 if (stream.match(/[a-zA-Z0-9 \t]+/)) {
