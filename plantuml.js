@@ -649,7 +649,6 @@ CodeMirror.defineMode("plantuml", function(config, parserConfig) {
                     return "builtin";
                 }                                                             
                 if (stream.match(/[A-Za-z_][A-Za-z_0-9]+/)) {
-                    console.log("GOTCHA");
                     return "variable";
                 }    
                 if (stream.match(/>>/)){
